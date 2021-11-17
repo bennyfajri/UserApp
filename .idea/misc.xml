@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/App/Android/UserApp/app/src/main/res/drawable/ic_delete.xml" value="0.1" />
         <entry key="..\:/App/Android/UserApp/app/src/main/res/layout/activity_main.xml" value="0.12" />
         <entry key="..\:/App/Android/UserApp/app/src/main/res/layout/fragment_add.xml" value="0.2" />
         <entry key="..\:/App/Android/UserApp/app/src/main/res/layout/fragment_addfragment.xml" value="0.1" />
         <entry key="..\:/App/Android/UserApp/app/src/main/res/layout/fragment_list.xml" value="0.152" />
         <entry key="..\:/App/Android/UserApp/app/src/main/res/layout/fragment_update.xml" value="0.176" />
         <entry key="..\:/App/Android/UserApp/app/src/main/res/layout/item_data.xml" value="0.1994459833795014" />
+        <entry key="..\:/App/Android/UserApp/app/src/main/res/menu/delete_menu.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
