@@ -1,6 +1,8 @@
-package com.example.userapp.data
+package com.example.userapp.repository
 
 import androidx.lifecycle.LiveData
+import com.example.userapp.data.UserDao
+import com.example.userapp.model.User
 
 class UserRepository(private val userDao: UserDao) {
 
@@ -8,5 +10,9 @@ class UserRepository(private val userDao: UserDao) {
 
     suspend fun addUser(user: User){
         userDao.addUser(user)
+    }
+
+    suspend fun updateUser(user: User){
+        userDao.updateUser(user)
     }
 }

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_listFragment_to_addfragment"
             app:destination="@id/addfragment" />
+        <action
+            android:id="@+id/action_listFragment_to_updateFragment"
+            app:destination="@id/updateFragment" />
     </fragment>
     <fragment
         android:id="@+id/addfragment"
@@ -22,5 +25,17 @@
         <action
             android:id="@+id/action_addfragment_to_listFragment"
             app:destination="@id/listFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateFragment"
+        android:name="com.example.userapp.fragments.update.UpdateFragment"
+        android:label="Update"
+        tools:layout="@layout/fragment_update" >
+        <action
+            android:id="@+id/action_updateFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+        <argument
+            android:name="currentUser"
+            app:argType="com.example.userapp.model.User" />
     </fragment>
 </navigation>
