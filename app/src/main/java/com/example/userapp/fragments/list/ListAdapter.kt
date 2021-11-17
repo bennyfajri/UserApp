@@ -3,9 +3,10 @@ package com.example.userapp.fragments.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.R
-import com.example.userapp.data.User
+import com.example.userapp.model.User
 import com.example.userapp.databinding.ItemDataBinding
 
 class ListAdapter: RecyclerView.Adapter<ListAdapter.ViewHolder>(){
@@ -22,6 +23,10 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ViewHolder>(){
             binding.tvName.text = "${user.firstName} ${user.lastName}"
             binding.tvId.text = user.id.toString()
             binding.tvAge.text = user.age.toString()
+            binding.itemData.setOnClickListener {
+                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(user)
+                binding.itemData.findNavController().navigate(action)
+            }
         }
     }
 
