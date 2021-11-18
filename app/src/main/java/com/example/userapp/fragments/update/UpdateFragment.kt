@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.userapp.R
 import com.example.userapp.databinding.FragmentUpdateBinding
+import com.example.userapp.model.Name
 import com.example.userapp.model.User
 import com.example.userapp.viewmodel.UserViewModel
 
@@ -31,8 +32,8 @@ class UpdateFragment : Fragment() {
 
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        binding.etFirstName.setText(args.currentUser.firstName)
-        binding.etLastName.setText(args.currentUser.lastName)
+        binding.etFirstName.setText(args.currentUser.name.firstName)
+        binding.etLastName.setText(args.currentUser.name.lastName)
         binding.etAge.setText(args.currentUser.age.toString())
 
         binding.btnUpdate.setOnClickListener {
@@ -49,10 +50,12 @@ class UpdateFragment : Fragment() {
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
         val age = binding.etAge.text
+        val address = binding.etAddress.text.toString()
 
         if(inputCheck(firstName, lastName, age)){
             // Create user object
-            val updateUser = User(args.currentUser.id,firstName, lastName, age.toString().toInt())
+                val name = Name(firstName, lastName)
+            val updateUser = User(args.currentUser.id,name, age.toString().toInt(), address)
             // Update current user
             userViewModel.updateUser(updateUser)
             Toast.makeText(context, "Updated successfully!", Toast.LENGTH_SHORT).show()
@@ -80,13 +83,13 @@ class UpdateFragment : Fragment() {
 
     private fun deleteUser() {
         AlertDialog.Builder(context)
-            .setTitle("Delete ${args.currentUser.firstName}")
-            .setMessage("Are you sure to delete ${args.currentUser.firstName}?")
+            .setTitle("Delete ${args.currentUser.name.firstName}")
+            .setMessage("Are you sure to delete ${args.currentUser.name.firstName}?")
             .setPositiveButton("Yes", DialogInterface.OnClickListener { dialogInterface, i ->
                 userViewModel.deleteUser(args.currentUser)
                 Toast.makeText(
                     context,
-                    "Sucessfully removed: ${args.currentUser.firstName}",
+                    "Sucessfully removed: ${args.currentUser.name.firstName}",
                     Toast.LENGTH_SHORT
                 ).show()
                 findNavController().navigate(R.id.action_updateFragment_to_listFragment)

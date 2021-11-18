@@ -14,6 +14,7 @@ import com.example.userapp.R
 import com.example.userapp.model.User
 import com.example.userapp.viewmodel.UserViewModel
 import com.example.userapp.databinding.FragmentAddBinding
+import com.example.userapp.model.Name
 
 class Addfragment : Fragment() {
 
@@ -39,21 +40,30 @@ class Addfragment : Fragment() {
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
         val age = binding.etAge.text
+        val address = binding.etAddress.text.toString()
 
-        if(inputCheck(firstName, lastName, age)){
+        if (inputCheck(firstName, lastName, age, address)) {
             // Create user object
-            val user = User(0, firstName, lastName, age.toString().toInt())
+            val name = Name(firstName, lastName)
+            val user = User(0, name, age.toString().toInt(), address)
             // Add data to database
             userViewModel.addUser(user)
             Toast.makeText(context, "Successfully added!", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_addfragment_to_listFragment)
-        }else{
+        } else {
             Toast.makeText(context, "Please fill out all fields", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun inputCheck(firstName: String, lastName: String, age: Editable): Boolean {
-        return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty())
+    private fun inputCheck(
+        firstName: String,
+        lastName: String,
+        age: Editable,
+        address: String
+    ): Boolean {
+        return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty() && TextUtils.isEmpty(
+            address
+        ))
     }
 
 }

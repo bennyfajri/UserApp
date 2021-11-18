@@ -20,13 +20,14 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ViewHolder>(){
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = userList[position]
         with(holder){
-            binding.tvName.text = "${user.firstName} ${user.lastName}"
+            binding.tvName.text = "${user.name.firstName} ${user.name.lastName}"
             binding.tvId.text = user.id.toString()
             binding.tvAge.text = user.age.toString()
             binding.itemData.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToUpdateFragment(user)
                 binding.itemData.findNavController().navigate(action)
             }
+            binding.tvAddress.text = user.address
         }
     }
 
