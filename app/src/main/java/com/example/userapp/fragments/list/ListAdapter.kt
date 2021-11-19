@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.userapp.R
 import com.example.userapp.model.User
 import com.example.userapp.databinding.ItemDataBinding
@@ -20,7 +21,7 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ViewHolder>(){
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = userList[position]
         with(holder){
-            binding.tvName.text = "${user.name.firstName} ${user.name.lastName}"
+            binding.tvName.text = "${user.firstName} ${user.lastName}"
             binding.tvId.text = user.id.toString()
             binding.tvAge.text = user.age.toString()
             binding.itemData.setOnClickListener {
@@ -28,6 +29,11 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ViewHolder>(){
                 binding.itemData.findNavController().navigate(action)
             }
             binding.tvAddress.text = user.address
+            Glide.with(itemView.context)
+                .load(user.profilePhoto)
+                .placeholder(android.R.color.darker_gray)
+                .error(android.R.color.darker_gray)
+                .into(binding.imgPhoto)
         }
     }
 

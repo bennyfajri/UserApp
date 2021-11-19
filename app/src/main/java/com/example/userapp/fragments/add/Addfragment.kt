@@ -1,24 +1,35 @@
 package com.example.userapp.fragments.add
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.R
+import com.example.userapp.databinding.FragmentAddBinding
 import com.example.userapp.model.User
 import com.example.userapp.viewmodel.UserViewModel
-import com.example.userapp.databinding.FragmentAddBinding
-import com.example.userapp.model.Name
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 
 class Addfragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
+    lateinit var bitmap: Bitmap
+    lateinit var decoded: Bitmap
 
     lateinit var binding: FragmentAddBinding
     override fun onCreateView(
@@ -33,6 +44,26 @@ class Addfragment : Fragment() {
             insertDataToDatabase()
         }
 
+        val getImage = registerForActivityResult(
+            ActivityResultContracts.GetContent(),
+            ActivityResultCallback {
+                if(Build.VERSION.SDK_INT < 28 ){
+                    bitmap = MediaStore.Images.Media.getBitmap(
+                        requireContext().contentResolver, it
+                    )
+                    setToImageView(getResizedBitmap(bitmap, 512)!!)
+                }else {
+                    val source = ImageDecoder.createSource(requireContext().contentResolver, it)
+                    bitmap = ImageDecoder.decodeBitmap(source)
+                    setToImageView(getResizedBitmap(bitmap, 512)!!)
+                }
+            }
+        )
+
+        binding.btnChoosePhoto.setOnClickListener {
+            getImage.launch("image/*")
+        }
+
         return binding.root
     }
 
@@ -42,10 +73,9 @@ class Addfragment : Fragment() {
         val age = binding.etAge.text
         val address = binding.etAddress.text.toString()
 
-        if (inputCheck(firstName, lastName, age, address)) {
+        if (inputCheck(firstName, lastName, age, address, binding.imgProfile)) {
             // Create user object
-            val name = Name(firstName, lastName)
-            val user = User(0, name, age.toString().toInt(), address)
+            val user = User(0, firstName, lastName, age.toString().toInt(), address, decoded)
             // Add data to database
             userViewModel.addUser(user)
             Toast.makeText(context, "Successfully added!", Toast.LENGTH_SHORT).show()
@@ -59,11 +89,32 @@ class Addfragment : Fragment() {
         firstName: String,
         lastName: String,
         age: Editable,
-        address: String
+        address: String,
+        image: ImageView
     ): Boolean {
-        return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty() && TextUtils.isEmpty(
-            address
-        ))
+        return !(TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || age.isEmpty() || TextUtils.isEmpty(address) || image.drawable == null)
+    }
+
+    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
+        var width = image.width
+        var height = image.height
+        val bitmapRatio = width.toFloat() / height.toFloat()
+        if (bitmapRatio > 1) {
+            width = maxSize
+            height = (width / bitmapRatio).toInt()
+        } else {
+            height = maxSize
+            width = (height * bitmapRatio).toInt()
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true)
+    }
+
+    private fun setToImageView(bmp: Bitmap) {
+        val bytes = ByteArrayOutputStream()
+        bmp.compress(Bitmap.CompressFormat.PNG, 75, bytes)
+        decoded = BitmapFactory.decodeStream(ByteArrayInputStream(bytes.toByteArray()))
+
+        binding.imgProfile.setImageBitmap(decoded)
     }
 
 }
