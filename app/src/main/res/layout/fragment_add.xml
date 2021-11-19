@@ -43,6 +43,28 @@
             android:layout_height="wrap_content"
             android:hint="Address" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@android:color/darker_gray"
+                android:scaleType="centerCrop"/>
+
+            <Button
+                android:id="@+id/btnChoosePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose photo"
+                android:textAllCaps="false"
+                android:layout_marginStart="16dp"/>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnAdd"
             android:layout_width="match_parent"
@@ -53,6 +75,5 @@
             android:layout_gravity="center"/>
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
