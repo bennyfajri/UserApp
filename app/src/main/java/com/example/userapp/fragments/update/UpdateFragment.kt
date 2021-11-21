@@ -37,6 +37,7 @@ class UpdateFragment : Fragment() {
     private val args by navArgs<UpdateFragmentArgs>()
     private lateinit var userViewModel: UserViewModel
     lateinit var bitmap: Bitmap
+    lateinit var decoded: Bitmap
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,16 +65,19 @@ class UpdateFragment : Fragment() {
         setHasOptionsMenu(true)
 
         val getImage = registerForActivityResult(
-            ActivityResultContracts.GetContent(),
-            ActivityResultCallback {
-                bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(requireContext().contentResolver, it))
-                } else {
-                    MediaStore.Images.Media.getBitmap(requireContext().contentResolver, it)
-                }
-                binding.imgProfile.setImageBitmap(bitmap)
+            ActivityResultContracts.GetContent()
+        ) {
+            if (Build.VERSION.SDK_INT < 28) {
+                bitmap = MediaStore.Images.Media.getBitmap(
+                    requireContext().contentResolver, it
+                )
+                setToImageView(getResizedBitmap(bitmap, 512)!!)
+            } else {
+                val source = ImageDecoder.createSource(requireContext().contentResolver, it)
+                bitmap = ImageDecoder.decodeBitmap(source)
+                setToImageView(getResizedBitmap(bitmap, 512)!!)
             }
-        )
+        }
 
         binding.btnChoosePhoto.setOnClickListener {
             getImage.launch("image/*")
@@ -89,11 +93,11 @@ class UpdateFragment : Fragment() {
         val address = binding.etAddress.text.toString()
 
         binding.imgProfile.invalidate()
-        bitmap = binding.imgProfile.drawable.toBitmap()
+        decoded = binding.imgProfile.drawable.toBitmap()
 
         if (inputCheck(firstName, lastName, age, address, binding.imgProfile)) {
             // Create user object
-            val updateUser = User(args.currentUser.id, firstName, lastName, age.toString().toInt(), address, bitmap)
+            val updateUser = User(args.currentUser.id, firstName, lastName, age.toString().toInt(), address, decoded)
             // Update current user
             userViewModel.updateUser(updateUser)
             Toast.makeText(context, "Updated successfully!", Toast.LENGTH_SHORT).show()
@@ -142,6 +146,31 @@ class UpdateFragment : Fragment() {
                 dialogInterface.dismiss()
             })
             .show()
+    }
+
+    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
+        var width = image.width
+        var height = image.height
+        val bitmapRatio = width.toFloat() / height.toFloat()
+        if (bitmapRatio > 1) {
+            width = maxSize
+            height = (width / bitmapRatio).toInt()
+        } else {
+            height = maxSize
+            width = (height * bitmapRatio).toInt()
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true)
+    }
+
+    private fun setToImageView(bmp: Bitmap) {
+        //compress image
+        val bytes = ByteArrayOutputStream()
+        bmp.compress(Bitmap.CompressFormat.JPEG, 75, bytes)
+        decoded = BitmapFactory.decodeStream(ByteArrayInputStream(bytes.toByteArray()))
+
+
+        //menampilkan gambar yang dipilih dari camera/gallery ke ImageView
+        binding.imgProfile.setImageBitmap(decoded)
     }
 
 }
