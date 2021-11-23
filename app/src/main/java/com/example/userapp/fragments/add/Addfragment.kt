@@ -70,12 +70,12 @@ class Addfragment : Fragment() {
     private fun insertDataToDatabase() {
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
-        val age = binding.etAge.text
+        val birthday = binding.etBirthday.text.toString()
         val address = binding.etAddress.text.toString()
 
-        if (inputCheck(firstName, lastName, age, address, binding.imgProfile)) {
+        if (inputCheck(firstName, lastName, birthday, address, binding.imgProfile)) {
             // Create user object
-            val user = User(0, firstName, lastName, age.toString().toInt(), address, decoded)
+            val user = User(0, firstName, lastName, birthday, address, decoded)
             // Add data to database
             userViewModel.addUser(user)
             Toast.makeText(context, "Successfully added!", Toast.LENGTH_SHORT).show()
@@ -88,11 +88,11 @@ class Addfragment : Fragment() {
     private fun inputCheck(
         firstName: String,
         lastName: String,
-        age: Editable,
+        birthday: String,
         address: String,
         image: ImageView
     ): Boolean {
-        return !(TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || age.isEmpty() || TextUtils.isEmpty(address) || image.drawable == null)
+        return !(TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || TextUtils.isEmpty(birthday) || TextUtils.isEmpty(address) || image.drawable == null)
     }
 
     fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {

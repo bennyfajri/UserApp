@@ -49,7 +49,7 @@ class UpdateFragment : Fragment() {
 
         binding.etFirstName.setText(args.currentUser.firstName)
         binding.etLastName.setText(args.currentUser.lastName)
-        binding.etAge.setText(args.currentUser.age.toString())
+        binding.etBirthday.setText(args.currentUser.birthday.toString())
         binding.etAddress.setText(args.currentUser.address)
         Glide.with(requireContext())
             .load(args.currentUser.profilePhoto)
@@ -89,15 +89,15 @@ class UpdateFragment : Fragment() {
     private fun updateItem() {
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
-        val age = binding.etAge.text
+        val birthday = binding.etBirthday.text.toString()
         val address = binding.etAddress.text.toString()
 
         binding.imgProfile.invalidate()
         decoded = binding.imgProfile.drawable.toBitmap()
 
-        if (inputCheck(firstName, lastName, age, address, binding.imgProfile)) {
+        if (inputCheck(firstName, lastName, birthday, address, binding.imgProfile)) {
             // Create user object
-            val updateUser = User(args.currentUser.id, firstName, lastName, age.toString().toInt(), address, decoded)
+            val updateUser = User(args.currentUser.id, firstName, lastName, birthday, address, decoded)
             // Update current user
             userViewModel.updateUser(updateUser)
             Toast.makeText(context, "Updated successfully!", Toast.LENGTH_SHORT).show()
@@ -111,11 +111,11 @@ class UpdateFragment : Fragment() {
     private fun inputCheck(
         firstName: String,
         lastName: String,
-        age: Editable,
+        birthday: String,
         address: String,
         image: ImageView
     ): Boolean {
-        return !(TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || age.isEmpty() || TextUtils.isEmpty(address) || image.drawable == null)
+        return !(TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || TextUtils.isEmpty(birthday) || TextUtils.isEmpty(address) || image.drawable == null)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

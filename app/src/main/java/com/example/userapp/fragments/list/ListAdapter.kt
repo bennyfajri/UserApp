@@ -23,7 +23,7 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ViewHolder>(){
         with(holder){
             binding.tvName.text = "${user.firstName} ${user.lastName}"
             binding.tvId.text = user.id.toString()
-            binding.tvAge.text = user.age.toString()
+            binding.tvAge.text = user.birthday.toString()
             binding.itemData.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToUpdateFragment(user)
                 binding.itemData.findNavController().navigate(action)

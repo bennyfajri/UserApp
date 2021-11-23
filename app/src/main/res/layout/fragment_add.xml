@@ -31,11 +31,10 @@
             android:hint="Last Name" />
 
         <EditText
-            android:id="@+id/etAge"
+            android:id="@+id/etBirthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Age"
-            android:inputType="number"/>
+            android:hint="Birthday"/>
 
         <EditText
             android:id="@+id/etAddress"
