@@ -5,7 +5,7 @@
     android:id="@+id/itemData"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="4dp"
+    android:paddingTop="16dp"
     android:paddingBottom="4dp"
     android:paddingStart="8dp"
     android:paddingEnd="8dp">
@@ -59,7 +59,7 @@
             android:id="@+id/tvAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Age 20"
+            android:text="Birthday"
             android:textSize="16sp" />
 
         <TextView
