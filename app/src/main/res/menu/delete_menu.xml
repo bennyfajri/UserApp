@@ -8,4 +8,12 @@
         android:icon="@drawable/ic_delete"
         android:iconTint="@color/white"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/search_menu"
+        android:title="search"
+        android:icon="@drawable/ic_search"
+        app:iconTint="@color/white"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 </menu>

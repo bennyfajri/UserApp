@@ -3,6 +3,7 @@ package com.example.userapp.repository
 import androidx.lifecycle.LiveData
 import com.example.userapp.data.UserDao
 import com.example.userapp.model.User
+import kotlinx.coroutines.flow.Flow
 
 class UserRepository(private val userDao: UserDao) {
 
@@ -22,5 +23,9 @@ class UserRepository(private val userDao: UserDao) {
 
     suspend fun deleteAllUser(){
         userDao.deleteAllUsers()
+    }
+
+    fun searchDatabase(searchQuery: String): Flow<List<User>> {
+        return userDao.searchDatabase(searchQuery)
     }
 }
